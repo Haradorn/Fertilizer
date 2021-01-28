@@ -1,0 +1,127 @@
+﻿@using Fertilizer.Models
+@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
+
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-right:before {
+        content: "\f054";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\f053";
+    }
+</style>
+<h1>Список заказчиков</h1>
+<form method="get">
+    <div class="form-inline">
+        <label>Название удобрения: </label>
+        <input name="name" value="@Model.FilterViewModel.SelectedName" class="form-control" />
+
+        <label>Компания-заказчик: </label>
+        <select name="customers" asp-items="Model.FilterViewModel.Customers" class="form-control"></select>
+
+        <input type="submit" value="Отфильтровать" class="btn btn-outline-dark" />
+    </div>
+</form>
+
+<table class="table">
+    <tr>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.NameFertilizerSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-customer="@(Model.FilterViewModel.SelectedCustomer)">Название удобрения</a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.FactorySort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-customer="@(Model.FilterViewModel.SelectedCustomer)">Цех-производитель</a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.PriceSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-customer="@(Model.FilterViewModel.SelectedCustomer)">Цена за тонну, руб.</a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.CustomerSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-customer="@(Model.FilterViewModel.SelectedCustomer)">Фирма-заказчик.</a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.AddressSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-customer="@(Model.FilterViewModel.SelectedCustomer)">Адрес.</a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.DirectorSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-customer="@(Model.FilterViewModel.SelectedCustomer)">Директор.</a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.TelephoneSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-customer="@(Model.FilterViewModel.SelectedCustomer)">Телефон.</a>
+        </th>
+    </tr>
+    @foreach (MinFertilizer f in Model.Fertilizers)
+    {
+        <tr>
+            <td>@f.NameFertilizer</td>
+            <td>@f.Factory</td>
+            <td>@f.Price</td>
+            <td>@f.Customer.NameCustomer</td>
+            <td>@f.Customer.Address</td>
+            <td>@f.Customer.Director</td>
+            <td>@f.Customer.Telephone</td>
+        </tr>
+    }
+</table>
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-name="@(Model.FilterViewModel.SelectedName)"
+       asp-route-company="@(Model.FilterViewModel.SelectedCustomer)"
+       asp-route-sortorder="@(Model.SortViewModel.Current)"
+       class="btn  btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-name="@(Model.FilterViewModel.SelectedName)"
+       asp-route-company="@(Model.FilterViewModel.SelectedCustomer)"
+       asp-route-sortorder="@(Model.SortViewModel.Current)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
