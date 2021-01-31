@@ -1,5 +1,6 @@
 ﻿@using Fertilizer.Models
 @model IndexViewModel
+@addTagHelper *, Fertilizer
 
 @{
     ViewData["Title"] = "Home Page";
@@ -32,7 +33,7 @@
 </style>
 <h1>Список заказчиков</h1>
 <form method="get">
-    <div class="form-inline">
+    <div class="form-group form-inline">
         <label>Название удобрения: </label>
         <input name="name" value="@Model.FilterViewModel.SelectedName" class="form-control" />
 
@@ -101,27 +102,8 @@
         </tr>
     }
 </table>
-@if (Model.PageViewModel.HasPreviousPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-name="@(Model.FilterViewModel.SelectedName)"
-       asp-route-company="@(Model.FilterViewModel.SelectedCustomer)"
-       asp-route-sortorder="@(Model.SortViewModel.Current)"
-       class="btn  btn-outline-dark">
-        <i class="glyphicon glyphicon-chevron-left"></i>
-        Назад
-    </a>
-}
-@if (Model.PageViewModel.HasNextPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-       asp-route-name="@(Model.FilterViewModel.SelectedName)"
-       asp-route-company="@(Model.FilterViewModel.SelectedCustomer)"
-       asp-route-sortorder="@(Model.SortViewModel.Current)"
-       class="btn btn-outline-dark">
-        Вперед
-        <i class="glyphicon glyphicon-chevron-right"></i>
-    </a>
-}
+
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-name="@(Model.FilterViewModel.SelectedName)"
+           page-url-customers="@(Model.FilterViewModel.SelectedCustomer)"
+           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>
